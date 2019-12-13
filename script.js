@@ -1,3 +1,4 @@
+//This function is used to read the data from the JSON File
 function readTextFile(file, callback) {
     var rawFile = new XMLHttpRequest();
     rawFile.overrideMimeType("application/json");
@@ -35,19 +36,22 @@ window.addEventListener('DOMContentLoaded', function(){
 	light2.diffuse = BABYLON.Color3.White();
 	light2.specular = BABYLON.Color3.Green();
 	light2.intensity = 0.6;
-    
+	  
+  //read data in the vectors.json file
   readTextFile("vectors.json", function(text){//Obtain Points and Define the offset
   var offset=5
-  var offset_1=[]
+  var offset_1=[]//offset points array that lies on top of original array
   var json_points=[]
-  var offset_2=[]
+  var offset_2=[]//offset points array that lies below of original array
   var data = JSON.parse(text);
   for (var key in data['Vector3Points']) {
     if (data['Vector3Points'].hasOwnProperty(key)) {
       console.log(key + " -> " + data['Vector3Points'][key]);
+	//get the Vector 3 points from the file
       var x_coord=data['Vector3Points'][key][0]
       var y_coord=data['Vector3Points'][key][1]
       var z_coord=data['Vector3Points'][key][2]
+      //pupulate all three arrays accordingly
       offset_1.push(new BABYLON.Vector3(x_coord,y_coord+offset,z_coord))
       json_points.push(new BABYLON.Vector3(x_coord,y_coord,z_coord))
       offset_2.push(new BABYLON.Vector3(x_coord,y_coord-offset,z_coord))
@@ -58,7 +62,7 @@ window.addEventListener('DOMContentLoaded', function(){
 	mat.alpha = 1.0;
 	mat.backFaceCulling = false;  
   var myMaterial = new BABYLON.StandardMaterial("myMaterial", scene);
-    
+  //define texture path with whatever is needed for it, below is just an example  
   var TEXTURE_PATH="https://cdn.glitch.com/1c2c7965-b669-443c-a9c8-e2c665d7babb%2FTrollFace.jpg?v=1576098311264"
 
   mat.diffuseTexture = new BABYLON.Texture(TEXTURE_PATH, scene);
@@ -68,8 +72,7 @@ window.addEventListener('DOMContentLoaded', function(){
     
     
     
-    
-    
+  //create ribbon from three array points defined above 
   var ribbon = BABYLON.MeshBuilder.CreateRibbon("ribbon", {pathArray: [offset_1, json_points, offset_2]}, scene);
 	ribbon.material = mat; 
 })
