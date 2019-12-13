@@ -36,7 +36,7 @@ window.addEventListener('DOMContentLoaded', function(){
 	light2.specular = BABYLON.Color3.Green();
 	light2.intensity = 0.6;
     
-  readTextFile("vectors.json", function(text){
+  readTextFile("vectors.json", function(text){//Obtain Points and Define the offset
   var offset=5
   var offset_1=[]
   var json_points=[]
