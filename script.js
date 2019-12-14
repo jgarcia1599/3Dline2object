@@ -39,44 +39,45 @@ window.addEventListener('DOMContentLoaded', function(){
 	  
   //read data in the vectors.json file
   readTextFile("vectors.json", function(text){//Obtain Points and Define the offset
-  var offset=5
-  var offset_1=[]//offset points array that lies on top of original array
-  var json_points=[]
-  var offset_2=[]//offset points array that lies below of original array
-  var data = JSON.parse(text);
-  for (var key in data['Vector3Points']) {
-    if (data['Vector3Points'].hasOwnProperty(key)) {
-      console.log(key + " -> " + data['Vector3Points'][key]);
-	//get the Vector 3 points from the file
-      var x_coord=data['Vector3Points'][key][0]
-      var y_coord=data['Vector3Points'][key][1]
-      var z_coord=data['Vector3Points'][key][2]
-      //pupulate all three arrays accordingly
-      offset_1.push(new BABYLON.Vector3(x_coord,y_coord+offset,z_coord))
-      json_points.push(new BABYLON.Vector3(x_coord,y_coord,z_coord))
-      offset_2.push(new BABYLON.Vector3(x_coord,y_coord-offset,z_coord))
-    }  
-  }
-  // material
-	var mat = new BABYLON.StandardMaterial("mat1", scene);
-	mat.alpha = 1.0;
-	mat.backFaceCulling = false;  
-  var myMaterial = new BABYLON.StandardMaterial("myMaterial", scene);
-  //define texture path with whatever is needed for it, below is just an example  
-  var TEXTURE_PATH="https://cdn.glitch.com/1c2c7965-b669-443c-a9c8-e2c665d7babb%2FTrollFace.jpg?v=1576098311264"
+    var offset=5
+    var offset_1=[]//offset points array that lies on top of original array
+    var json_points=[]
+    var offset_2=[]//offset points array that lies below of original array
+    var data = JSON.parse(text);
+    for (var key in data['Vector3Points']) {
+      if (data['Vector3Points'].hasOwnProperty(key)) {
+        console.log(key + " -> " + data['Vector3Points'][key]);
+    //get the Vector 3 points from the file
+        var x_coord=data['Vector3Points'][key][0]
+        var y_coord=data['Vector3Points'][key][1]
+        var z_coord=data['Vector3Points'][key][2]
+        //pupulate all three arrays accordingly
+        offset_1.push(new BABYLON.Vector3(x_coord,y_coord+offset,z_coord))
+        json_points.push(new BABYLON.Vector3(x_coord,y_coord,z_coord))
+        offset_2.push(new BABYLON.Vector3(x_coord,y_coord-offset,z_coord))
+      }  
+    }
+    // material
+    var mat = new BABYLON.StandardMaterial("mat1", scene);
+    mat.alpha = 1.0;
+    mat.backFaceCulling = false;  
+    var myMaterial = new BABYLON.StandardMaterial("myMaterial", scene);
+    //define texture path with whatever is needed for it, below is just an example  
+    var TEXTURE_PATH="https://cdn.glitch.com/1c2c7965-b669-443c-a9c8-e2c665d7babb%2FTrollFace.jpg?v=1576098311264"
 
-  mat.diffuseTexture = new BABYLON.Texture(TEXTURE_PATH, scene);
-  mat.specularTexture = new BABYLON.Texture(TEXTURE_PATH, scene);
-  mat.emissiveTexture = new BABYLON.Texture(TEXTURE_PATH, scene);
-  mat.ambientTexture = new BABYLON.Texture(TEXTURE_PATH, scene);
-    
-    
-    
-  //create ribbon from three array points defined above 
-  var ribbon = BABYLON.MeshBuilder.CreateRibbon("ribbon", {pathArray: [offset_1, json_points, offset_2]}, scene);
-	ribbon.material = mat; 
-})
+    mat.diffuseTexture = new BABYLON.Texture(TEXTURE_PATH, scene);
+    mat.specularTexture = new BABYLON.Texture(TEXTURE_PATH, scene);
+    mat.emissiveTexture = new BABYLON.Texture(TEXTURE_PATH, scene);
+    mat.ambientTexture = new BABYLON.Texture(TEXTURE_PATH, scene);
+
+    //create ribbon from three array points defined above 
+    var ribbon = BABYLON.MeshBuilder.CreateRibbon("ribbon", {pathArray: [offset_1, json_points, offset_2]}, scene);
+    ribbon.material = mat;
+    BABYLON.GLTF2Export.GLTFAsync(scene, "scene").then((gltf) => {
+      gltf.downloadFiles();})
+  })
 	return scene;
+    
   }
 
   // call the createScene function
