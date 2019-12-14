@@ -67,13 +67,14 @@ window.addEventListener('DOMContentLoaded', function(){
   mat.ambientTexture = new BABYLON.Texture(TEXTURE_PATH, scene);
     
     
-    
-    
-    
+  
   var ribbon = BABYLON.MeshBuilder.CreateRibbon("ribbon", {pathArray: [offset_1, json_points, offset_2]}, scene);
-	ribbon.material = mat; 
+	ribbon.material = mat;
+  BABYLON.GLTF2Export.GLTFAsync(scene, "scene").then((gltf) => {
+    gltf.downloadFiles();})
 })
 	return scene;
+    
   }
 
   // call the createScene function
